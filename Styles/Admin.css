@@ -3,3 +3,8 @@
     border: black 1px solid;
     padding: 24px;
 }
+
+#github-repo {
+    text-decoration: none;
+    color: green;
+}
