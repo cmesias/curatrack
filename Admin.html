@@ -23,17 +23,17 @@
             <legend>Employee Enrollment</legend> 
             <!-- First name -->
             <div>
-                <input id="first-name" type="text" name="first-name" placeholder="First Name"></input>
+                <input id="first-name" type="text" name="first-name" placeholder="First Name"  autocomplete="off"></input>
             </div>
 
             <!-- Last name -->
             <div>
-                <input id="last-name" type="text" name="last-name" placeholder="Last Name"></input>
+                <input id="last-name" type="text" name="last-name" placeholder="Last Name" autocomplete="off"></input>
             </div>
 
             <!-- Email -->
             <div>
-                <input id="email" type="text" name="email" placeholder="Email"></input>
+                <input id="email" type="text" name="email" placeholder="Email" autocomplete="off"></input>
             </div>
 
             <!-- Date of birth -->
@@ -48,12 +48,12 @@
                 <label for="doctor_role">Doctor</label>
 
                 <!-- Nurse RN option -->
-                <input type="radio" id="nurse_rn_role" name="worker_role" value="NURSE"></input>
-                <label for="nurse_rn_role">Nurse, RN</label>
+                <input type="radio" id="rn_role" name="worker_role" value="NURSE"></input>
+                <label for="rn_role">RN</label>
 
                 <!-- Nurse LVN option -->
-                <input type="radio" id="nurse_lvn_role" name="worker_role" value="NURSE"></input>
-                <label for="nurse_lvn_role">Nurse, LVN</label>
+                <input type="radio" id="lvn_role" name="worker_role" value="NURSE"></input>
+                <label for="lvn_role">LVN</label>
             </div>
 
             <!-- Create new Doctor or Nurse -->
@@ -62,82 +62,45 @@
         
         <hr>
         <h3>Employee List</h3>
+        <p id="employee-count">Number of employees: </p>
         <div id="main-container">
 
             <!-- Worker div -->
-            <div class="worker">
+            <!-- <div class="worker"> -->
 
                 <!-- Title -->
-                <p><b>Title: </b>Lucy Nguyen, MD.</p>
+                <!-- <p><b>Title: </b>Lucy Nguyen, MD.</p> -->
 
                 <!-- Line break -->
-                <hr>
+                <!-- <hr> -->
 
                 <!-- First Name -->
-                <p><b>First name: </b>Lucy</p>
+                <!-- <p><b>First name: </b>Lucy</p> -->
 
                 <!-- Last Name -->
-                <p><b>Last name: </b>Nguyen</p>
+                <!-- <p><b>Last name: </b>Nguyen</p> -->
 
                 <!-- Email -->
-                <p><b>Email: </b>lucynguyen123@gmail.com</p>
+                <!-- <p><b>Email: </b>lucynguyen123@gmail.com</p> -->
 
                 <!-- Date of Birth -->
-                <p><b>Date of birth: </b>March 14, 1976</p>
+                <!-- <p><b>Date of birth: </b>March 14, 1976</p> -->
 
                 <!-- Role -->
-                <p><b>Role: </b>Doctor</p>
-            </div>
-
-            <!-- Worker div -->
-            <div class="worker">
-
-                <!-- Title -->
-                <p><b>Title: </b>Joey Martinez, RN.</p>
+                <!-- <p><b>Role: </b>Doctor</p> -->
 
                 <!-- Line break -->
-                <hr>
+                <!-- <hr> -->
 
-                <!-- First Name -->
-                <p><b>First name: </b>Joey</p>
+                <!-- Username -->
+                <!-- <p><b>Username: </b>lucynguyen1</p> -->
 
-                <!-- Last Name -->
-                <p><b>Last name: </b>Martinez</p>
+                <!-- Password -->
+                <!-- <p><b>Password: </b>Abcde12345$$</p> -->
 
-                <!-- Date of Birth -->
-                <p><b>Date of birth: </b>October 5, 1998</p>
-
-                <!-- Email -->
-                <p><b>Email: </b>joeymartinez123@gmail.com</p>
-
-                <!-- Role -->
-                <p><b>Role: </b>Nurse, RN</p>
-            </div>
-
-            <!-- Worker div -->
-            <div class="worker">
-
-                <!-- Title -->
-                <p><b>Title: </b>Sunny Ortiz, LVN.</p>
-
-                <!-- Line break -->
-                <hr>
-
-                <!-- First Name -->
-                <p><b>First name: </b>Sunny</p>
-
-                <!-- Last Name -->
-                <p><b>Last name: </b>Ortiz</p>
-
-                <!-- Date of Birth -->
-                <p><b>Date of birth: </b>March 17, 1998</p>
-
-                <!-- Email -->
-                <p><b>Email: </b>sunnyortiz123@gmail.com</p>
-
-                <!-- Role -->
-                <p><b>Role: </b>Nurse, LVN</p>
-            </div>
+                <!-- Status -->
+                <!-- <p><b>Status: </b>Active</p> -->
+            <!-- </div> -->
 
         </div>
     </div>
