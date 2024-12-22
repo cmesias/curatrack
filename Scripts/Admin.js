@@ -1,4 +1,12 @@
 
+/*
+    TODO [ ] - Need better way to auto-generate random passwords for new workers when adding a new worker in the database.
+    TODO [ ] - Need better way to auto-generate default usernames
+    TODO [ ] - Create form validation to prevent invalid or missing input wen creating new users
+    
+
+*/
+
 const Employees = [
     {
         "user_id": "employee_1",      // auto-generated, for admin or Website admin only
