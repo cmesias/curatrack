@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nurse Dashboard</title>
+    <title>Doctor Dashboard</title>
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="Styles/Doctor.css">
 
@@ -33,7 +33,7 @@
     <div>
         <hr>
         <h2>Welcome Doctor!</h2>
-        <p>Enter new worker information below</p>
+        <p>Enter new resident information below</p>
 
         <fieldset>
             <legend>Resident Enrollment</legend>
@@ -62,30 +62,39 @@
                         max="2006-12-31" required></input>
                 </div>
 
-                <!-- Resident care type -->
-                <div>
-                    <!-- Long Term Care -->
-                    <input type="radio" id="long_term" name="resident_type" value="long-term-care" required></input>
-                    <label for="long_term">Long Term Care</label>
-
-                    <!-- Short Term Care -->
-                    <input type="radio" id="short_term" name="resident_type" value="short-term-care"></input>
-                    <label for="short_term">Short Term Care</label>
-
-                    <!-- Rehabilitation -->
-                    <input type="radio" id="rehab" name="resident_type" value="rehab-care"></input>
-                    <label for="rehab">Rehabilitation</label>
-
-                    <!-- Palliative -->
-                    <input type="radio" id="palliative" name="resident_type" value="palliative-care"></input>
-                    <label for="palliative">Palliative Care</label>
+                <!-- Care type -->
+                <div class="dropdowns">
+                    <div>
+                        <label for="care-type">Care:</label>
+                        <select name="care-type" id="care-type">
+                            <option disableed selected value> -- select care option --</option>
+                            <option value="LTC">Long-Term Care</option>
+                            <option value="STC">Short-Term Care</option>
+                            <option value="REH">Rehabilitation</option>
+                            <option value="PAL">Palliative</option>
+                        </select>
+                    </div>
+    
+                    <!-- Resident status -->
+                    <div>
+                        <label for="residency-status">Status:</label>
+                        <select name="residency-status" id="residency-status">
+                            <option disableed selected value> -- select residency option --</option>
+                            <option value="admitted">Admitted</option>
+                            <option value="discharged">Discharged</option>
+                            <option value="pending">Pending</option>
+                            <option value="transferred">Transferred</option>
+                            <option value="deceased">Deceased</option>
+                            <option value="temporaryLeave">Temporary Leave</option>
+                        </select>
+                    </div>
                 </div>
                     
                 <!-- Random selection -->
                 <button type="button" id="random-data">Random</button>
 
-                <!-- Create new Doctor or Nurse -->
-                <button id="new-worker">Submit</button>
+                <!-- Create new Resident -->
+                <button id="new-resident">Submit</button>
             </form>
         </fieldset>
 
@@ -128,8 +137,8 @@
 
         <div id="main-container" class="disabled">
 
-            <!-- Worker div -->
-            <!-- <div class="worker-all"> -->
+            <!-- Resident div -->
+            <!-- <div class="resident-all"> -->
                 <!-- First Name -->
                 <!-- <p><b>First name: </b>Lucy</p> -->
             <!-- </div> -->

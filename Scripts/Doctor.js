@@ -1,5 +1,5 @@
 // Author: Carl Mesias
-// Title: Nurse Dashboard
+// Title: Doctor Dashboard
 
 /*
  * TODO 
