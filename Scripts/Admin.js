@@ -1,50 +1,16 @@
+// Author: Carl Mesias
+// Title: Admin Dashboard
 
 /*
-    TODO [ ] - Need better way to auto-generate random passwords for new workers when adding a new worker in the database.
-    TODO [ ] - Need better way to auto-generate default usernames
-    TODO [ ] - Create form validation to prevent invalid or missing input wen creating new users
-    
+ * TODO 
+ * [ ] Implement UUID new emlpoyee entry
+ * [ ] Implement form validation to prevent invalid or missing input when creating new users
+ */
 
-*/
-
-const Employees = [
-    {
-        "user_id": "employee_1",      // auto-generated, for admin or Website admin only
-        "first_name": "Lucy",
-        "last_name": "Nguyen",
-        "email": "lucynguyen123@gmail.com",
-        "date_of_birth": "1976-03-14",
-        "role": "Doctor",
-        "username": "lucynguyen1",          // auto-generated, first name + last name + number. Used for logging in
-        "password_hash": "Abcde12345$$",    // Used for logging in
-        "employment_status": "Active"
-    },
-    {
-        "user_id": "employee_2", 
-        "first_name": "Joey",
-        "last_name": "Martinez",
-        "email": "joeymartinez123@gmail.com",
-        "date_of_birth": "1998-10-05",
-        "role": "RN",
-        "username": "joeymartinez1",
-        "password_hash": "Abcde12345$$",
-        "employment_status": "Active"  
-    },
-    {
-        "user_id": "employee_3", 
-        "first_name": "Sunny",
-        "last_name": "Ortiz",
-        "email": "sunnyortiz123@gmail.com",
-        "date_of_birth": "1995-06-17",
-        "role": "LVN",
-        "username": "sunnyortiz1",
-        "password_hash": "Abcde12345$$",
-        "employment_status": "Active"
-    }
-]
+/* Empty Employees array that we will fill with data fetched from the localStorage (next iteration, fetch from a database) */
+let Employees = [];
 
 function WordedBirthDate(birthDate) {
-
     const months = [
         "January",
         "February",
@@ -58,7 +24,7 @@ function WordedBirthDate(birthDate) {
         "October",
         "November",
         "December"
-      ];
+    ];
 
     const birthYear = birthDate.slice(0, 4);
     const birthMonth = birthDate.slice(5, 7);
@@ -67,7 +33,7 @@ function WordedBirthDate(birthDate) {
     // Remove "0" from Month. 
     // We minus 1 because selecting a month starts with 1, but in an array it starts with 0 index
     let idxMonth = (parseInt(birthMonth, 10)) - 1;
-    let month = months[ idxMonth ];
+    let month = months[idxMonth];
 
     // Remove "0" from Day
     let day = parseInt(birthDay, 10);
@@ -75,37 +41,45 @@ function WordedBirthDate(birthDate) {
     return `${month} ${day}, ${birthYear}`;
 }
 
-/*  Employees:
-[
-    {
-        "user_id" : <user_id>,  
-        "first_name" : <first_name>,  
-        "last_name" : <last_name>,  
-        "role" : <role>,
-            more employee data...
-    },
-    ... more employees
-]
-*/
-
 // Update employee count in front-end
-function UpdateEmployeeCount()
-{
+const UpdateEmployeeCountFrontEnd = () => {
     const employeeCount = document.getElementById("employee-count");
     employeeCount.textContent = `Number of employees: ${Employees.length}`;
 }
 
-// Get Employee data from database and load that data into elements to display to the Admin
-// 1. Get each employee data
-// 2. Store employee data in 'worker' div class
-// 3. Append 'worker' div to 'main-container' that displays all employees
-function LoadWorkerDataBase(employeesArr)
-{
-    // Update employee count in front-end
-    UpdateEmployeeCount();
+// Update employee count
+const UpdateEmployeeCountBackEnd = () => {
+    localStorage.setItem("EmployeeCount", Employees.length);
+}
+
+// Update database with new employee
+const UpdateEmployeeDataBaseBackEnd = () => {
+    localStorage.setItem("Employees", JSON.stringify(Employees));
+}
+
+// Retrieve/fetch Employee data from localStorage (in the future fetch from database)
+const RetrieveEmployeeData = () => {
+
+    // Use JSON.parse that will convert our JSON string
+    // back into JavaScript (in this case valid array)
+    let employeesFromLocalStorage = JSON.parse(localStorage.getItem("Employees"));
+
+    // Use spread operator to copy 'employeesFromLocalStorage' to 'Employees' array
+    Employees = [...employeesFromLocalStorage];
+}
+
+// Append employee data in DOM in virtual card format
+const ShowEmployeeCards = (employeesArr) => {
 
     /// Get reference to main container ///
     const mainContainer = document.getElementById("main-container");
+
+    // Clear div
+    mainContainer.innerHTML = '';
+
+    // Add border and padding
+    mainContainer.style.border = "black 1px solid";
+    mainContainer.style.padding = "24px";
 
     for (let e of employeesArr) {
 
@@ -114,16 +88,16 @@ function LoadWorkerDataBase(employeesArr)
         ////////////////////////////////////////////////////////////
 
         /// Get each employees data ///
-        const firstName         = e.first_name;
-        const lastName          = e.last_name;
-        const birthDate         = e.date_of_birth;
-        const email             = e.email;
-        const role              = e.role;
-        
-        const username          = e.username;
-        const password          = e.password_hash;
-        const employmentStatus  = e.employment_status;
-        const userId            = e.user_id;
+        const firstName = e.first_name;
+        const lastName = e.last_name;
+        const birthDate = e.date_of_birth;
+        const email = e.email;
+        const role = e.role;
+
+        const username = e.username;
+        const password = e.password_hash;
+        const employmentStatus = e.employment_status;
+        const userId = e.user_id;
 
         ////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////
@@ -133,62 +107,62 @@ function LoadWorkerDataBase(employeesArr)
 
         // Create worker div
         const div = document.createElement("div");
-        div.classList.add("worker");        // Add class "worker" to div
-    
+        div.classList.add("worker-all");        // Add class "worker" to div
+
         // Create title
         const p1 = document.createElement("p");
 
         // If role is "Doctor" set the ending title to "MD" to display on screen, otherwise just input "role" value (i.e. RN or LVN)
         p1.innerHTML = `<b>Title: </b> ${firstName} ${lastName}, ${role === "Doctor" ? "MD" : role}.`;
-    
+
         // Add line break
         const hr = document.createElement("hr");
 
         ////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////
-    
+
         // Create first name
         const p2 = document.createElement("p");
         p2.innerHTML = `<b>First name: </b> ${firstName}`;
-    
+
         // Create last name
         const p3 = document.createElement("p");
         p3.innerHTML = `<b>Last name: </b> ${lastName}`;
-    
+
         // Create email
         const p4 = document.createElement("p");
         p4.innerHTML = `<b>Email: </b> ${email}`;
-    
+
         // Create birth date
         const p5 = document.createElement("p");
         p5.innerHTML = `<b>Date of birth: </b> ${WordedBirthDate(birthDate)}`;
-    
+
         // Create role
         const p6 = document.createElement("p");
 
         // If role is NOT "Doctor", set role output to include "Nurse, <type_of_nurse>", otherwise, just output role (i.e.: "Doctor")
         p6.innerHTML = `<b>Role: </b> ${role !== "Doctor" ? `Nurse, ${role}` : role}`;
-    
+
         // Add line break
         const hr2 = document.createElement("hr2");
-    
+
         // Add username
         const p7 = document.createElement("p");
         p7.innerHTML = `<b>Username: </b> ${username}`;
-    
+
         // Add password
         const p8 = document.createElement("p");
         p8.innerHTML = `<b>Password: </b> ${password}`;
-    
+
         // Add active employment_status
         const p9 = document.createElement("p");
         p9.innerHTML = `<b>Status: </b> ${employmentStatus}`;
-    
+
         // Add user_id
         const p10 = document.createElement("p");
         p10.innerHTML = `<b>user_id: </b> ${userId}`;
-    
+
         ////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////
@@ -211,160 +185,394 @@ function LoadWorkerDataBase(employeesArr)
         // Appen worker div to main container
         mainContainer.append(div);
     }
-
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+const getRole = (doctorChosen, nurseRNChosen, nurseLVNChosen) =>
+{
+    let role = '';
+    if (doctorChosen.checked) {
+        role = "Doctor";
+    }
+    else if (nurseRNChosen.checked) {
+        role = "RN";
+    }
+    else if (nurseLVNChosen.checked) {
+        role = "LVN";
+    }
 
-    // Intial load of employees from database
-    LoadWorkerDataBase(Employees);
-    
-    // submit button to create a new doctor or nurse
-    const newWorkerBtn = document.getElementById("new-worker");
+    return role;
+}
 
-    // Add event listener
-    newWorkerBtn.addEventListener("click", function() {
+// Store new employee entry in array from inputs
+const StoreNewEmployeeFromInputs = () => {
+    /// Get references ///
 
-        /// Get references ///
-        const mainContainer = document.getElementById("main-container");
-    
-        // worker data
+    // worker data
+    const firstName = document.getElementById("first-name");
+    const lastName = document.getElementById("last-name");
+    const email = document.getElementById("email");
+    const birthDate = document.getElementById("birth-date");
+
+    const doctorChosen = document.getElementById("doctor_role");
+    const nurseRNChosen = document.getElementById("rn_role");
+    const nurseLVNChosen = document.getElementById("lvn_role");
+    const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
+
+    const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
+    const password = "*********";
+    const employmentStatus = "Active";
+
+    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+
+    // Store new worker in object
+    const newWorker = {
+        "first_name": firstName.value,
+        "last_name": lastName.value,
+        "email": email.value,
+        "date_of_birth": birthDate.value,
+        "role": role,
+
+        "username": username,
+        "password_hash": password,
+        "employment_status": employmentStatus,
+        "user_id": `employee_${Employees.length + 1}`,
+    }
+
+    // Push new worker to database array
+    Employees.push(newWorker);
+}
+
+/// Append new employee entry to table
+// 1. Get tbody reference
+// 2. Create tr (row) for employee data item
+// 3. Append each employee data in row
+// 4. Append row into tbody
+const AppendNewEmployeeToTableFrontEnd = () =>
+{
+    // worker data
+    const firstName = document.getElementById("first-name");
+    const lastName = document.getElementById("last-name");
+    const email = document.getElementById("email");
+
+    const doctorChosen = document.getElementById("doctor_role");
+    const nurseRNChosen = document.getElementById("rn_role");
+    const nurseLVNChosen = document.getElementById("lvn_role");
+    const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
+
+    const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
+    const password = "*********";
+    const employmentStatus = "Active";
+    const userId = `employee_${Employees.length}`;
+
+    ////////////////////////////////////////////////////////////////////////////
+    //-------------------------------- Step 1 --------------------------------//
+
+    // Get tbody refrence
+    let tbody = document.getElementById("employee-tbody")
+
+    // Get row length, will use this when creation of row
+    let rowLength = tbody.querySelectorAll("tr").length;
+
+    ////////////////////////////////////////////////////////////////////////////
+    //-------------------------------- Step 2 --------------------------------//
+
+    // Create row
+    let row = document.createElement("tr");
+
+    // Add row id
+    row.setAttribute("id", `row_${rowLength}`);
+
+    //-------------------------------- Step 3 --------------------------------//
+
+    // Employee
+    let td1 = document.createElement("td");
+    td1.innerText = `${lastName.value}, ${firstName.value}`;
+    row.append(td1);
+
+    // Position
+    let td2 = document.createElement("td");
+    td2.innerText = role;
+    row.append(td2);
+
+    // Status
+    let td3 = document.createElement("td");
+    td3.innerText = employmentStatus;
+    row.append(td3);
+
+    // Email
+    let td4 = document.createElement("td");
+    td4.innerText = email.value;
+    row.append(td4);
+
+    // Username
+    let td5 = document.createElement("td");
+    td5.innerText = username;
+    row.append(td5);
+
+    // Password
+    let td6 = document.createElement("td");
+    td6.innerText = password;
+    row.append(td6);
+
+    // User ID
+    let td7 = document.createElement("td");
+    td7.innerText = userId;
+    row.append(td7);
+
+    //-------------------------------- Step 4 --------------------------------//
+    // Append new row to tbody
+    tbody.append(row);
+}
+
+const CreateTable = () => {
+    const tableHeadArrTitles = [
+        'Employee',
+        'Position',
+        'Status',
+        'Email',
+        'Username',
+        'Password',
+        'User ID',
+    ]
+
+    // Create table head titles
+    tableHeadArrTitles.forEach((th_value, th_index) => {
+
+        // Add each column head: "Employee","Position", "Status", etc...
+        const categories_id = document.getElementById('employee-headers');
+
+        // Create table header
+        const th = document.createElement('th');
+
+        // Added the TableHeader title to a table header
+        th.innerText = th_value;
+
+        // Append 'th' to '#employee-headers
+        categories_id.append(th);
+    });
+}
+
+// Load employees from database
+const LoadEmployees = () => {
+
+    // Clear table head
+    $('#employee-headers').html('');
+
+    // Clear table body
+    $('#employee-tbody').html('');
+
+    // Create table
+    CreateTable();
+
+    // Retrieve data from database
+    RetrieveEmployeeData();
+
+    // Update employee count in front-end
+    UpdateEmployeeCountFrontEnd();
+
+    // Update employee count in back-end
+    UpdateEmployeeCountBackEnd();
+
+    // Create amount of rows with Employees length
+    CreateXRows(Employees.length);
+
+    // Append employee data to table
+    AppendEmployeesToFrontEnd();
+}
+
+const AppendEmployeesToFrontEnd = () => {
+    // Loop through each row, then insert employee data in each row
+
+    // Loop through each row
+    for (let i = 0; i < Employees.length; i++) {
+        // Get current row
+        let row = document.getElementById(`row_${i}`);
+        // console.log(`Current row: ${i}`);
+
+        // 1. Loop through employees
+        // 2. Create td for employee data item
+        // 3. Insert each td after creating it to current row 
+        Employees.forEach((value, index) => {
+            // console.log(`Employee index: ${index}`);
+
+            if (i == index) {
+                // console.log(`Corresponding employee: ${index}, ${value.last_name}`);
+
+                // Create td that will hold each Employee data we want to insert
+
+                // Employee
+                let td1 = document.createElement("td");
+                td1.innerText = `${value.last_name}, ${value.first_name}`;   // Hold value
+                row.append(td1);                   // Insert value into current row
+
+                // Position
+                let td2 = document.createElement("td");
+                td2.innerText = value.role;
+                row.append(td2);
+
+                // Status
+                let td3 = document.createElement("td");
+                td3.innerText = value.employment_status;
+                row.append(td3);
+
+                // Email
+                let td4 = document.createElement("td");
+                td4.innerText = value.email;
+                row.append(td4);
+
+                // Username
+                let td5 = document.createElement("td");
+                td5.innerText = value.username;
+                row.append(td5);
+
+                // Password
+                let td6 = document.createElement("td");
+                td6.innerText = value.password_hash;
+                row.append(td6);
+
+                // User ID
+                let td7 = document.createElement("td");
+                td7.innerText = value.user_id;
+                row.append(td7);
+            }
+        });
+    }
+}
+
+const HideEmployeesList = () => {
+    $('#main-container').addClass('disabled');
+}
+
+const ShowEmployeesList = () => {
+    $('#main-container').removeClass('disabled');
+}
+const ShowTable = () => {
+    // If content loaded, show table
+    $('#main-table').removeClass('disabled');
+}
+
+const HideTable = () => {
+    $('#main-table').addClass('disabled');
+}
+
+// Wait for DOM content to load
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Upon DOM load, load employess and insert data into table
+    LoadEmployees();
+    ShowTable();
+
+    // Get references
+    const randomDataBtn = document.getElementById("random-data");
+    const submitBtn = document.getElementById("new-worker");
+
+    const fetchEmployeesBtn = document.getElementById("fetch-employees-database");
+    const showTableBtn = document.getElementById("show-table");
+    const showAllEmployeesBtn = document.getElementById("show-all-employees");
+    const hideEmployeeListBtn = document.getElementById("hide-employee-list");
+
+
+    // Load employee data from database then show table
+    fetchEmployeesBtn.addEventListener("click", function () {
+        LoadEmployees();
+    });
+
+
+    // Display table in front-end
+    showTableBtn.addEventListener("click", function () {
+        ShowTable();
+        HideEmployeesList();
+    });
+
+    // Display all employees in front-end
+    showAllEmployeesBtn.addEventListener("click", function () {
+        // Show employees
+        ShowEmployeesList();
+
+        // Hide Table
+        HideTable();
+
+        // Display employee
+        ShowEmployeeCards(Employees);
+    });
+
+    // Hide employee list
+    hideEmployeeListBtn.addEventListener("click", function () {
+        HideEmployeesList();
+        HideTable();
+    });
+
+    // Set random data for user
+    randomDataBtn.addEventListener("click", function () {
+        
+        // Get refrences
         const firstName = document.getElementById("first-name");
         const lastName = document.getElementById("last-name");
         const email = document.getElementById("email");
-        const birthDate = document.getElementById("birth-date");
-    
-        const doctorChosen = document.getElementById("doctor_role");
-        const nurseRNChosen = document.getElementById("rn_role");
-        const nurseLVNChosen = document.getElementById("lvn_role");
-    
-        // Worker's role
-        let role = "";
+        const date = document.getElementById("birth-date")  // YYYY-MM-DD
 
-        const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
-        const password = "Abcde12345$$";
-        const employmentStatus = "Active";
+        const doctorRole = document.getElementById("doctor_role");
+        const rnRole = document.getElementById("rn_role");
+        const lvnRole = document.getElementById("lvn_role");
 
-        /// Determine if title is Doctor or Nurse ///
-        if (doctorChosen.checked)
-        {
-            role = "Doctor";
-        }
-        else if (nurseRNChosen.checked)
-        {
-            role = "RN";
-        }
-        else if (nurseLVNChosen.checked)
-        {
-            role = "LVN";
-        }
-
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-
-        // Create worker div
-        const div = document.createElement("div");
-        div.classList.add("worker");        // Add class "worker" to div
-
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-
-        // Create title
-        const p1 = document.createElement("p");
-
-        // If role is "Doctor" set the ending title to "MD" to display on screen, otherwise just input "role" value (i.e. RN or LVN)
-        p1.innerHTML = `<b>Title: </b> ${firstName.value} ${lastName.value}, ${role === "Doctor" ? "MD" : role}.`;
-
-        // Add line break
-        const hr = document.createElement("hr");
-
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-
-        // Create first name
-        const p2 = document.createElement("p");
-        p2.innerHTML = `<b>First name: </b> ${firstName.value}`;
-
-        // Create last name
-        const p3 = document.createElement("p");
-        p3.innerHTML = `<b>Last name: </b> ${lastName.value}`;
-
-        // Create email
-        const p4 = document.createElement("p");
-        p4.innerHTML = `<b>Email: </b> ${email.value}`;
-
-        // Create birth date
-        const p5 = document.createElement("p");
-        p5.innerHTML = `<b>Date of birth: </b> ${WordedBirthDate(birthDate.value)}`;
-
-        // Create role
-        const p6 = document.createElement("p");
+        // Set data to random values
+        firstName.value = randomFirstName();
+        lastName.value = randomLastName();
+        email.value = randomEmail();
+        date.value = randomDate();
         
-        // If role is NOT "Doctor", set role output to include "Nurse, <type_of_nurse>", otherwise, just output role (i.e.: "Doctor")
-        p6.innerHTML = `<b>Role: </b> ${role !== "Doctor" ? `Nurse, ${role}` : role}`;
-
-        // Add line break
-        const hr2 = document.createElement("hr2");
-
-        // Add username
-        const p7 = document.createElement("p");
-        p7.innerHTML = `<b>Username: </b> ${username}`;
-
-        // Add password
-        const p8 = document.createElement("p");
-        p8.innerHTML = `<b>Password: </b> ${password}`;
-
-        // Add active status
-        const p9 = document.createElement("p");
-        p9.innerHTML = `<b>Status: </b> ${employmentStatus}`;
-
-        // Add user_id
-        const p10 = document.createElement("p");
-        p10.innerHTML = `<b>user_id: </b> employee_${Employees.length+1}`;
-
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////
-
-        /// Append ///
-        div.append(p1);     // Append "Title" to worker div
-        div.append(hr);     // Append line break to worker div
-        div.append(p2);     // Append "first_name" to worker div
-        div.append(p3);     // Append "last_name" to worker div
-        div.append(p4);     // Append "email" to worker div
-        div.append(p5);     // Append "birth_date" to worker div
-        div.append(p6);     // Append "Role" to worker div
-
-        div.append(hr2);    // Append line break to worker div
-        div.append(p7);     // Append "username" to worker div
-        div.append(p8);     // Append "password" to worker div
-        div.append(p9);     // Append "status" to worker div
-        div.append(p10);    // Append "user_id" to worker div
-
-        // Appen worker div to main container to display to User (the Admin)
-        mainContainer.append(div);
-
-        // Create new array for our new worker, then push to database array of Employees
-        const newWorker = {
-            "first_name": firstName.value,
-            "last_name": lastName.value,
-            "email": email.value,
-            "date_of_birth": birthDate.value,
-            "role": role,
-
-            "username": username,
-            "password": password,
-            "employment_status": employmentStatus,
-            "user_id": `employee_${Employees.length+1}`,
+        const randRoleVal = Math.floor(Math.random() * fakesRoles.length);
+        switch (randRoleVal) {
+            case 0:
+                doctorRole.checked = true;
+            break;
+            case 1:
+                rnRole.checked = true;
+            break;
+            case 2:
+                lvnRole.checked = true;
+            break;
         }
+    });
+    
+    // Create new worker (i.e.: Doctor or Nurse)
+    submitBtn.addEventListener("click", function (e) {
 
-        // Push new worker to database array
-        Employees.push(newWorker);
+        // Prevent page from refreshing
+        e.preventDefault();
+        
+        // Load employees locally from database
+        LoadEmployees();
+
+        // Store new employee entry in array from inputs
+        StoreNewEmployeeFromInputs();
+
+        // Update whole database with new employee entry
+        UpdateEmployeeDataBaseBackEnd();
 
         // Update employee count in front-end
-        UpdateEmployeeCount();
+        UpdateEmployeeCountFrontEnd();
+
+        // Update employee count in back-end
+        UpdateEmployeeCountBackEnd();
+
+        // Append new employee entry to table
+        AppendNewEmployeeToTableFrontEnd();
     });
 });
+
+function CreateXRows(numberOfEmployees) {
+
+    for (let i = 0; i < numberOfEmployees; i++) {
+        // Get tbody
+        let tbody = document.querySelector("tbody");
+
+        // Create a row
+        let row = tbody.insertRow(-1);
+
+        // Set row id
+        row.setAttribute('id', `row_${i}`);
+    }
+}

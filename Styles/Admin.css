@@ -1,10 +1,29 @@
-
-.worker {
-    border: black 1px solid;
+* {
+    box-sizing: border-box;
+}
+.worker-all {
+    border: lightgray 1px solid;
     padding: 24px;
 }
 
 #github-repo {
     text-decoration: none;
     color: green;
+}
+
+table {
+    border: lightgray 1px solid;
+    padding: 20px;
+}
+
+thead th {
+    border-bottom: solid 0.25em rgb(27, 21, 21);
+}
+
+td {
+    padding: 8px;
+}
+
+.disabled {
+    display: none;
 }
