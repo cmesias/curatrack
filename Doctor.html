@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Nurse Dashboard</title>
     <link rel="stylesheet" href="app.css">
-    <link rel="stylesheet" href="Styles/Admin.css">
+    <link rel="stylesheet" href="Styles/Doctor.css">
 
 
     <script src="https://unpkg.com/jquery"></script>
@@ -14,10 +14,10 @@
     <script src="https://unpkg.com/lodash"></script>
 
     <script src="Scripts/Fakes.js"></script>
-    <script src="Scripts/Admin.js"></script>
+    <script src="Scripts/Doctor.js"></script>
 </head>
 
-<body class="admin-body">
+<body class="doctor-body">
     <h1>CuraTrack</h1>
     <nav>
         <a id="github-repo" href="https://github.com/cmesias/curatrack">Github repo</a>
@@ -32,11 +32,11 @@
 
     <div>
         <hr>
-        <h2>Welcome Admin!</h2>
+        <h2>Welcome Doctor!</h2>
         <p>Enter new worker information below</p>
 
         <fieldset>
-            <legend>Employee Enrollment</legend>
+            <legend>Resident Enrollment</legend>
             <form>
                 <!-- First name -->
                 <div>
@@ -62,19 +62,23 @@
                         max="2006-12-31" required></input>
                 </div>
 
-                <!-- Doctor or Nurse -->
+                <!-- Resident care type -->
                 <div>
-                    <!-- Doctor option -->
-                    <input type="radio" id="doctor_role" name="worker_role" value="DOCTOR" required></input>
-                    <label for="doctor_role">Doctor</label>
+                    <!-- Long Term Care -->
+                    <input type="radio" id="long_term" name="resident_type" value="long-term-care" required></input>
+                    <label for="long_term">Long Term Care</label>
 
-                    <!-- Nurse RN option -->
-                    <input type="radio" id="rn_role" name="worker_role" value="NURSE"></input>
-                    <label for="rn_role">RN</label>
+                    <!-- Short Term Care -->
+                    <input type="radio" id="short_term" name="resident_type" value="short-term-care"></input>
+                    <label for="short_term">Short Term Care</label>
 
-                    <!-- Nurse LVN option -->
-                    <input type="radio" id="lvn_role" name="worker_role" value="NURSE"></input>
-                    <label for="lvn_role">LVN</label>
+                    <!-- Rehabilitation -->
+                    <input type="radio" id="rehab" name="resident_type" value="rehab-care"></input>
+                    <label for="rehab">Rehabilitation</label>
+
+                    <!-- Palliative -->
+                    <input type="radio" id="palliative" name="resident_type" value="palliative-care"></input>
+                    <label for="palliative">Palliative Care</label>
                 </div>
                     
                 <!-- Random selection -->
@@ -85,32 +89,32 @@
             </form>
         </fieldset>
 
-        <!-- Admin buttons to update employee data -->
+        <!-- Admin buttons to update resident data -->
         <h4>Admin buttons</h4>
         <div>
-            <button type="button" id="fetch-employees-database">Refresh Employee Data</button>
+            <button type="button" id="fetch-residents-database">Refresh Resident Data</button>
             <button type="button" id="show-table">Show Table</button>
-            <button type="button" id="show-all-employees">Show Card</button>
-            <button type="button" id="hide-employee-list">X</button>
+            <button type="button" id="show-all-residents">Show Card</button>
+            <button type="button" id="hide-resident-list">X</button>
         </div>
         <hr>
 
-        <!-- Main container holding all employee list -->
-        <h3>Employee List</h3>
-        <p id="employee-count">Number of employees: </p>
+        <!-- Main container holding all resident list -->
+        <h3>Resident List</h3>
+        <p id="resident-count">Number of residents: </p>
 
-        <section class="mother">
+        <section>
             <table id="main-table" class="disabled">
                 <thead>
-                    <tr id="employee-headers">
-                        <!-- <th>Employee</th> -->
+                    <tr id="resident-headers">
+                        <!-- <th>Resident</th> -->
                         <!-- <th>Positon</th> -->
                     </tr>
                 </thead>
 
                 <hr>
 
-                <tbody id="employee-tbody">
+                <tbody id="resident-tbody">
   
                 <!-- <tr id="row_0">        -->
                 <!--    <td>Jasmine</td>    -->
