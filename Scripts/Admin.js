@@ -63,9 +63,18 @@ const RetrieveEmployeeData = () => {
     // Use JSON.parse that will convert our JSON string
     // back into JavaScript (in this case valid array)
     let employeesFromLocalStorage = JSON.parse(localStorage.getItem("Employees"));
+    
+    // No localStorage employees data
+    if (!employeesFromLocalStorage) {
+        console.log("Error, no data from localStorage");
+    } 
 
-    // Use spread operator to copy 'employeesFromLocalStorage' to 'Employees' array
-    Employees = [...employeesFromLocalStorage];
+    // Load localStorage employees data
+    else {
+
+        // Use spread operator to copy 'employeesFromLocalStorage' to 'Employees' array
+        Employees = [...employeesFromLocalStorage];
+    }
 }
 
 // Append employee data in DOM in virtual card format
@@ -460,9 +469,10 @@ const HideTable = () => {
 // Wait for DOM content to load
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Upon DOM load, load employess and insert data into table
+    // Upon DOM load, load employess and show table
     LoadEmployees();
-    ShowTable();
+    Employees.length <= 0 ? HideTable() : ShowTable();
+        
 
     // Get references
     const randomDataBtn = document.getElementById("random-data");
@@ -560,6 +570,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Append new employee entry to table
         AppendNewEmployeeToTableFrontEnd();
+
+        // Show table
+        ShowTable();
     });
 });
 
