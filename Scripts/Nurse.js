@@ -101,11 +101,11 @@ const ShowResidentCards = (residentsArr) => {
         const lastName = e.last_name;
         const birthDate = e.date_of_birth;
         const email = e.email;
-        const role = e.role;
+        const careType = e.care_type;
 
         const username = e.username;
         const password = e.password_hash;
-        const employmentStatus = e.employment_status;
+        const residencyStatus = e.residency_status;
         const userId = e.user_id;
 
         ////////////////////////////////////////////////////////////
@@ -114,15 +114,15 @@ const ShowResidentCards = (residentsArr) => {
 
         /// Create elements to store resident data, we will display this to the Admin to see ///
 
-        // Create worker div
+        // Create resident div
         const div = document.createElement("div");
-        div.classList.add("worker-all");        // Add class "worker" to div
+        div.classList.add("resident-all");        // Add class "resident-all" to div
 
         // Create title
         const p1 = document.createElement("p");
 
-        // If role is "Doctor" set the ending title to "MD" to display on screen, otherwise just input "role" value (i.e. RN or LVN)
-        p1.innerHTML = `<b>Title: </b> ${firstName} ${lastName}, ${role === "Doctor" ? "MD" : role}.`;
+        // 
+        p1.innerHTML = `<b>Title: </b> ${firstName} ${lastName}, ${careType}.`;
 
         // Add line break
         const hr = document.createElement("hr");
@@ -147,11 +147,11 @@ const ShowResidentCards = (residentsArr) => {
         const p5 = document.createElement("p");
         p5.innerHTML = `<b>Date of birth: </b> ${WordedBirthDate(birthDate)}`;
 
-        // Create role
+        // Create care type
         const p6 = document.createElement("p");
 
-        // If role is NOT "Doctor", set role output to include "Nurse, <type_of_nurse>", otherwise, just output role (i.e.: "Doctor")
-        p6.innerHTML = `<b>Role: </b> ${role !== "Doctor" ? `Nurse, ${role}` : role}`;
+        // 
+        p6.innerHTML = `<b>Care: </b> ${careType}`;
 
         // Add line break
         const hr2 = document.createElement("hr2");
@@ -164,9 +164,9 @@ const ShowResidentCards = (residentsArr) => {
         const p8 = document.createElement("p");
         p8.innerHTML = `<b>Password: </b> ${password}`;
 
-        // Add active employment_status
+        // Add active residency_status
         const p9 = document.createElement("p");
-        p9.innerHTML = `<b>Status: </b> ${employmentStatus}`;
+        p9.innerHTML = `<b>Status: </b> ${residencyStatus}`;
 
         // Add user_id
         const p10 = document.createElement("p");
@@ -177,80 +177,61 @@ const ShowResidentCards = (residentsArr) => {
         ////////////////////////////////////////////////////////////
 
         /// Append ///
-        div.append(p1);     // Append "Title" to worker div
-        div.append(hr);     // Append line break to worker div
-        div.append(p2);     // Append "first name" to worker div
-        div.append(p3);     // Append "last name" to worker div
-        div.append(p4);     // Append "email" to worker div
-        div.append(p5);     // Append "birth date" to worker div
-        div.append(p6);     // Append "Role" to worker div
+        div.append(p1);     // Append "Title" to resident div
+        div.append(hr);     // Append line break to resident div
+        div.append(p2);     // Append "first name" to resident div
+        div.append(p3);     // Append "last name" to resident div
+        div.append(p4);     // Append "email" to resident div
+        div.append(p5);     // Append "birth date" to resident div
+        div.append(p6);     // Append "Care" to resident div
 
-        div.append(hr2);    // Append line break to worker div
-        div.append(p7);     // Append "username" to worker div
-        div.append(p8);     // Append "password" to worker div
-        div.append(p9);     // Append "employment_status" to worker div
-        div.append(p10);    // Append "user_id" to worker div
+        div.append(hr2);    // Append line break to resident div
+        div.append(p7);     // Append "username" to resident div
+        div.append(p8);     // Append "password" to resident div
+        div.append(p9);     // Append "residency_status" to resident div
+        div.append(p10);    // Append "user_id" to resident div
 
-        // Appen worker div to main container
+        // Appen resident div to main container
         mainContainer.append(div);
     }
-}
-
-const getRole = (doctorChosen, nurseRNChosen, nurseLVNChosen) =>
-{
-    let role = '';
-    if (doctorChosen.checked) {
-        role = "Doctor";
-    }
-    else if (nurseRNChosen.checked) {
-        role = "RN";
-    }
-    else if (nurseLVNChosen.checked) {
-        role = "LVN";
-    }
-
-    return role;
 }
 
 // Store new resident entry in array from inputs
 const StoreNewResidentFromInputs = () => {
     /// Get references ///
 
-    // worker data
+    // resident data
     const firstName = document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
     const email = document.getElementById("email");
     const birthDate = document.getElementById("birth-date");
 
-    const doctorChosen = document.getElementById("doctor_role");
-    const nurseRNChosen = document.getElementById("rn_role");
-    const nurseLVNChosen = document.getElementById("lvn_role");
-    const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
+    const careType = document.getElementById("care-type");
+    const residencyStatus = document.getElementById("residency-status");
 
     const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
     const password = "*********";
-    const employmentStatus = "Active";
 
     ////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////
 
-    // Store new worker in object
-    const newWorker = {
+    // Store new resident data in object
+    const newResident = {
         "first_name": firstName.value,
         "last_name": lastName.value,
         "email": email.value,
         "date_of_birth": birthDate.value,
-        "role": role,
+        "care_type": careType.value,
 
         "username": username,
         "password_hash": password,
-        "employment_status": employmentStatus,
         "user_id": `resident_${Residents.length + 1}`,
+        "residency_status": residencyStatus.value,
     }
 
-    // Push new worker to database array
-    Residents.push(newWorker);
+    // Push new resident to database array
+    Residents.push(newResident);
 }
 
 /// Append new resident entry to table
@@ -260,19 +241,16 @@ const StoreNewResidentFromInputs = () => {
 // 4. Append row into tbody
 const AppendNewResidentToTableFrontEnd = () =>
 {
-    // worker data
+    // resident data
     const firstName = document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
     const email = document.getElementById("email");
 
-    const doctorChosen = document.getElementById("doctor_role");
-    const nurseRNChosen = document.getElementById("rn_role");
-    const nurseLVNChosen = document.getElementById("lvn_role");
-    const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
+    const careType = document.getElementById("care-type");
+    const residencyStatus = document.getElementById("residency-status");
 
     const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
     const password = "*********";
-    const employmentStatus = "Active";
     const userId = `resident_${Residents.length}`;
 
     ////////////////////////////////////////////////////////////////////////////
@@ -300,34 +278,34 @@ const AppendNewResidentToTableFrontEnd = () =>
     td1.innerText = `${lastName.value}, ${firstName.value}`;
     row.append(td1);
 
-    // Position
+    // Care
     let td2 = document.createElement("td");
-    td2.innerText = role;
+    td2.innerText = careType.value;
     row.append(td2);
 
-    // Status
+    // Email
     let td3 = document.createElement("td");
-    td3.innerText = employmentStatus;
+    td3.innerText = email.value;
     row.append(td3);
 
-    // Email
+    // Username
     let td4 = document.createElement("td");
-    td4.innerText = email.value;
+    td4.innerText = username;
     row.append(td4);
 
-    // Username
+    // Password
     let td5 = document.createElement("td");
-    td5.innerText = username;
+    td5.innerText = password;
     row.append(td5);
 
-    // Password
+    // User ID
     let td6 = document.createElement("td");
-    td6.innerText = password;
+    td6.innerText = userId;
     row.append(td6);
 
-    // User ID
+    // Status
     let td7 = document.createElement("td");
-    td7.innerText = userId;
+    td7.innerText = residencyStatus.value;
     row.append(td7);
 
     //-------------------------------- Step 4 --------------------------------//
@@ -338,18 +316,18 @@ const AppendNewResidentToTableFrontEnd = () =>
 const CreateTable = () => {
     const tableHeadArrTitles = [
         'Resident',
-        'Position',
-        'Status',
+        'Care',
         'Email',
         'Username',
         'Password',
         'User ID',
+        'Status'
     ]
 
     // Create table head titles
     tableHeadArrTitles.forEach((th_value, th_index) => {
 
-        // Add each column head: "Resident","Position", "Status", etc...
+        // Add each column head: "Resident","Focus", "Status", etc...
         const categories_id = document.getElementById('resident-headers');
 
         // Create table header
@@ -416,34 +394,34 @@ const AppendResidentsToFrontEnd = () => {
                 td1.innerText = `${value.last_name}, ${value.first_name}`;   // Hold value
                 row.append(td1);                   // Insert value into current row
 
-                // Position
+                // Care
                 let td2 = document.createElement("td");
-                td2.innerText = value.role;
+                td2.innerText = value.care_type;
                 row.append(td2);
 
-                // Status
+                // Email
                 let td3 = document.createElement("td");
-                td3.innerText = value.employment_status;
+                td3.innerText = value.email;
                 row.append(td3);
 
-                // Email
+                // Username
                 let td4 = document.createElement("td");
-                td4.innerText = value.email;
+                td4.innerText = value.username;
                 row.append(td4);
 
-                // Username
+                // Password
                 let td5 = document.createElement("td");
-                td5.innerText = value.username;
+                td5.innerText = value.password_hash;
                 row.append(td5);
 
-                // Password
+                // User ID
                 let td6 = document.createElement("td");
-                td6.innerText = value.password_hash;
+                td6.innerText = value.user_id;
                 row.append(td6);
 
-                // User ID
+                // Status
                 let td7 = document.createElement("td");
-                td7.innerText = value.user_id;
+                td7.innerText = value.residency_status;
                 row.append(td7);
             }
         });
@@ -476,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Get references
     const randomDataBtn = document.getElementById("random-data");
-    const submitBtn = document.getElementById("new-worker");
+    const submitBtn = document.getElementById("new-resident");
 
     const fetchResidentsBtn = document.getElementById("fetch-residents-database");
     const showTableBtn = document.getElementById("show-table");
@@ -518,36 +496,24 @@ document.addEventListener('DOMContentLoaded', function () {
     randomDataBtn.addEventListener("click", function () {
         
         // Get refrences
-        const firstName = document.getElementById("first-name");
-        const lastName = document.getElementById("last-name");
-        const email = document.getElementById("email");
-        const date = document.getElementById("birth-date")  // YYYY-MM-DD
+        let firstName = document.getElementById("first-name");
+        let lastName = document.getElementById("last-name");
+        let email = document.getElementById("email");
+        let date = document.getElementById("birth-date")  // YYYY-MM-DD
 
-        const doctorRole = document.getElementById("doctor_role");
-        const rnRole = document.getElementById("rn_role");
-        const lvnRole = document.getElementById("lvn_role");
+        let careType = document.getElementById("care-type");
+        let residencyStatus = document.getElementById("residency-status");
 
         // Set data to random values
         firstName.value = randomFirstName();
         lastName.value = randomLastName();
         email.value = randomEmail();
         date.value = randomDate();
-        
-        const randRoleVal = Math.floor(Math.random() * fakesRoles.length);
-        switch (randRoleVal) {
-            case 0:
-                doctorRole.checked = true;
-            break;
-            case 1:
-                rnRole.checked = true;
-            break;
-            case 2:
-                lvnRole.checked = true;
-            break;
-        }
+        careType.value = randomCareType();
+        residencyStatus.value = randomResidencyStatus();
     });
     
-    // Create new worker (i.e.: Doctor or Nurse)
+    // Create new Resident
     submitBtn.addEventListener("click", function (e) {
 
         // Prevent page from refreshing

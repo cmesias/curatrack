@@ -70,9 +70,25 @@ const fakesEmails = [
 ];
 
 const fakesRoles = [
-  "Doctor",
-  "RN",
-  "LVN"
+  "Doctor",      // Doctor, MD
+  "RN",          // Registered Nurse
+  "LVN"          // Lcencsed Vocational Nurse
+]
+
+const fakesCareTypes = [
+  "LTC",        // Long-Term Care
+  "STC",        // Short-Term Care
+  "REH",        // Rehabilitation Care
+  "PAL"         // Palliative  Care
+]
+
+const fakesResidencyStatus = [
+  "admitted",
+  "discharged",
+  "pending",
+  "transferred",
+  "deceased",
+  "temporaryLeave"
 ]
 
 const randomFirstName = function () {
@@ -93,6 +109,18 @@ const randomEmail = () => {
 const randomRole = () => {
   let randVal = Math.floor(Math.random() * fakesRoles.length);
   return fakesRoles[randVal];
+}
+
+const randomCareType = () => {
+  let randVal = Math.floor(Math.random() * fakesCareTypes.length);
+  console.log(`Generated care type: ${fakesCareTypes[randVal]}`);
+  return fakesCareTypes[randVal];
+}
+
+const randomResidencyStatus = () => {
+  let randVal = Math.floor(Math.random() * fakesResidencyStatus.length);
+  console.log(`Generated care type: ${fakesResidencyStatus[randVal]}`);
+  return fakesResidencyStatus[randVal];
 }
 
 // YYYY-MM-DD

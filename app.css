@@ -67,3 +67,8 @@ body {
 #main-table {
     margin: 0 auto;
 }
+
+input,
+select {
+    margin: 5px;
+}
