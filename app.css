@@ -1,3 +1,5 @@
+
+/* General body styling */
 * {
     box-sizing: content-box;
     font-family: Arial, Helvetica, sans-serif;
@@ -7,6 +9,61 @@ a {
     text-decoration: none;
     color: black;
 }
+
 a:hover {
     text-decoration: underline;
+}
+
+#github-repo {
+    text-decoration: none;
+    color: green;
+}
+
+body {
+    margin: 12px;
+    padding: 0;
+}
+
+/* Home Dashboard */
+.home-body {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+/* Admin Dashboard */
+.admin-body {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Doctor Dashboard */
+.doctor-body {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Nurse Dashboard */
+.nurse-body {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Login Dashboard */
+.login-body {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* Padding and centering */
+.home-body,
+.login-body,
+.admin-body,
+.doctor-body,
+.nurse-body {
+    padding: 20px;
+    text-align: center;
+}
+
+#main-table {
+    margin: 0 auto;
 }
