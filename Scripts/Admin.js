@@ -473,7 +473,6 @@ document.addEventListener('DOMContentLoaded', function () {
     LoadEmployees();
     Employees.length <= 0 ? HideTable() : ShowTable();
         
-
     // Get references
     const randomDataBtn = document.getElementById("random-data");
     const submitBtn = document.getElementById("new-worker");
@@ -518,10 +517,11 @@ document.addEventListener('DOMContentLoaded', function () {
     randomDataBtn.addEventListener("click", function () {
         
         // Get refrences
+        const username = document.getElementById("username");
         const firstName = document.getElementById("first-name");
         const lastName = document.getElementById("last-name");
         const email = document.getElementById("email");
-        const date = document.getElementById("birth-date")  // YYYY-MM-DD
+        const birthDate = document.getElementById("birth-date")  // YYYY-MM-DD
 
         const doctorRole = document.getElementById("doctor_role");
         const rnRole = document.getElementById("rn_role");
@@ -531,8 +531,10 @@ document.addEventListener('DOMContentLoaded', function () {
         firstName.value = randomFirstName();
         lastName.value = randomLastName();
         email.value = randomEmail();
-        date.value = randomDate();
-        
+        birthDate.value = randomDate();
+        username.value = `${firstName.value}${lastName.value}${birthDate.value.slice(8, 10)}`.toLowerCase();
+
+        // Set random role for Employee
         const randRoleVal = Math.floor(Math.random() * fakesRoles.length);
         switch (randRoleVal) {
             case 0:
@@ -551,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function () {
     submitBtn.addEventListener("click", function (e) {
 
         // Prevent page from refreshing
-        e.preventDefault();
+        // e.preventDefault();
         
         // Load employees locally from database
         LoadEmployees();
@@ -574,6 +576,82 @@ document.addEventListener('DOMContentLoaded', function () {
         // Show table
         ShowTable();
     });
+
+
+    // Catch input event when user typing in firstname and last name
+    {
+        // Listen for these
+        let firstName = document.getElementById("first-name");
+        let lastName = document.getElementById("last-name");
+        let birthDay = document.getElementById("birth-date");
+
+        let usernameStart = '';
+        let usernameMiddle = '';
+        let usernameEnd = '';
+
+        // Update these
+        let username = document.getElementById("username");
+
+        // Listen for input on first name
+        firstName.addEventListener("input", function()
+        {
+            // Update these values just in case there are values already in these inputs
+            {
+                usernameStart = firstName.value;
+                usernameMiddle = lastName.value;
+                usernameEnd = birthDay.value.slice(8, 10);
+            }
+
+            // Set username's first part
+            usernameStart = firstName.value;
+
+            // Lower case username
+            let lowerCased = `${usernameStart}${usernameMiddle}${usernameEnd}`.toLowerCase();
+
+            // Update username in front-end
+            username.value = lowerCased;
+        });
+
+        // Listen for input on last name
+        lastName.addEventListener("input", function()
+        {
+            // Update these values just in case there are values already in these inputs
+            {
+                usernameStart = firstName.value;
+                usernameMiddle = lastName.value;
+                usernameEnd = birthDay.value.slice(8, 10);
+            }
+
+            // Set username's second part
+            usernameMiddle = lastName.value;
+
+            // Lower case username
+            let lowerCased = `${usernameStart}${usernameMiddle}${usernameEnd}`.toLowerCase();
+
+            // Update username in front-end
+            username.value = lowerCased;
+        });
+
+        // Listen for input on birth date
+        birthDay.addEventListener("input", function()
+        {
+            // Update these values just in case there are values already in these inputs
+            {
+                usernameStart = firstName.value;
+                usernameMiddle = lastName.value;
+                usernameEnd = birthDay.value.slice(8, 10);
+            }
+
+            // Set username's third part
+            usernameEnd = birthDay.value.slice(8, 10);
+
+            // Lower case username
+            let lowerCased = `${usernameStart}${usernameMiddle}${usernameEnd}`.toLowerCase();
+
+            // Update username in front-end
+            username.value = lowerCased;
+        });
+    }
 });
 
 function CreateXRows(numberOfEmployees) {

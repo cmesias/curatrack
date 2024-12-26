@@ -6,15 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="app.css">
-    <link rel="stylesheet" href="Styles/Admin.css">
+    <link rel="stylesheet" href="Styles/admin.css">
 
 
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
     <script src="https://unpkg.com/lodash"></script>
 
-    <script src="Scripts/Fakes.js"></script>
-    <script src="Scripts/Admin.js"></script>
+    <script type ="module" src="Scripts/register.js" defer></script>
+    <script src="Scripts/fakes.js"></script>
+    <script src="Scripts/admin.js"></script>
 </head>
 
 <body class="admin-body">
@@ -24,10 +25,10 @@
     </nav>
     <nav>
         <a href="./index.html">Home</a>
-        <a href="./Login.html">Log In</a>
-        <a href="./Admin.html">Admin</a>
-        <a href="./Doctor.html">Doctor</a>
-        <a href="./Nurse.html">Nurse</a>
+        <a href="./login.html">Log In</a>
+        <a href="./admin.html">Admin</a>
+        <a href="./doctor.html">Doctor</a>
+        <a href="./nurse.html">Nurse</a>
     </nav>
 
     <div>
@@ -38,20 +39,29 @@
         <fieldset>
             <legend>Employee Enrollment</legend>
             <form>
+
+                <!-- Username -->
+                <div>
+                    <label for="username">Username</label>
+                    <input type="username" placeholder="johndoe11" id="username" required disabled>
+                </div>
                 <!-- First name -->
                 <div>
+                    <label for="first-name">First Name</label>
                     <input id="first-name" type="text" name="first-name" placeholder="First Name" 
                     autocomplete="off" required></input>
                 </div>
 
                 <!-- Last name -->
                 <div>
+                    <label for="last-name">Last Name</label>
                     <input id="last-name" type="text" name="last-name" placeholder="Last Name" 
                     autocomplete="off"required></input>
                 </div>
 
                 <!-- Email -->
                 <div>
+                    <label for="email">Email</label>
                     <input id="email" type="text" name="email" placeholder="Email" 
                     autocomplete="off" required></input>
                 </div>
@@ -81,7 +91,7 @@
                 <button type="button" id="random-data">Random</button>
 
                 <!-- Create new Doctor or Nurse -->
-                <button id="new-worker">Submit</button>
+                <button type="submit" id="new-worker">Submit</button>
             </form>
         </fieldset>
 
