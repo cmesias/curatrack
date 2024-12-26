@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In Dashboard</title>
     <link rel="stylesheet" href="app.css">
+    <script type="module" src="login.html" defer></script>
 </head>
 <body class="login-body">
     <h1>CuraTrack</h1>
@@ -13,28 +14,38 @@
     </nav>
     <nav>
         <a href="./index.html">Home</a>
-        <a href="./login.html">Log In</a>
-        <a href="./admin.html">Admin</a>
-        <a href="./doctor.html">Doctor</a>
-        <a href="./nurse.html">Nurse</a>
+        <a href="./Login.html">Log In</a>
     </nav>
     
     <div>
         <hr><h2>Welcome Back</h2>
         <p>Enter your credentials to login</p>
 
-        <!-- Username -->
+        <!-- Email -->
         <div>
-            <input type="text" placeholder="Username" name="username"></input>
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="Email" 
+            autocomplete="off" required></input>
         </div>
         
         <!-- Password -->
+            <div>
+                <label for="password">Password</label>
+                <input type="password" placeholder="Password" id="password" required>
+            </div>
+
+        <!-- User type -->
         <div>
-            <input type="text" placeholder="Password" name="password"></input>
+            <label for="user-type"></label>
+            <select name="user-type" id="user-type" required>
+                <option disabled selected value> -- select login type -- </option>
+                <option value="employee">Staff</option>
+                <option value="admin">Admin</option>
+            </select>
         </div>
 
         <!-- Submit button -->
-        <button type="submit">Login</button>
+        <button type="submit" id="login-submit">Login</button>
         <p><a href="#">Forgot password?</a></p>
         <p>Don't have an account? <a href="#">Sign Up</a></p>
     </div>

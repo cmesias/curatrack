@@ -24,10 +24,7 @@
     </nav>
     <nav>
         <a href="./index.html">Home</a>
-        <a href="./login.html">Log In</a>
-        <a href="./admin.html">Admin</a>
-        <a href="./doctor.html">Doctor</a>
-        <a href="./nurse.html">Nurse</a>
+        <a href="./Login.html">Log In</a>
     </nav>
 
     <div>
@@ -66,8 +63,8 @@
                 <div class="dropdowns">
                     <div>
                         <label for="care-type">Care:</label>
-                        <select name="care-type" id="care-type">
-                            <option disableed selected value> -- select care option --</option>
+                        <select name="care-type" id="care-type" required>
+                            <option disabled selected value> -- select care option --</option>
                             <option value="LTC">Long-Term Care</option>
                             <option value="STC">Short-Term Care</option>
                             <option value="REH">Rehabilitation</option>
@@ -78,8 +75,8 @@
                     <!-- Resident status -->
                     <div>
                         <label for="residency-status">Status:</label>
-                        <select name="residency-status" id="residency-status">
-                            <option disableed selected value> -- select residency option --</option>
+                        <select name="residency-status" id="residency-status" required>
+                            <option disabled selected value> -- select residency option --</option>
                             <option value="admitted">Admitted</option>
                             <option value="discharged">Discharged</option>
                             <option value="pending">Pending</option>
