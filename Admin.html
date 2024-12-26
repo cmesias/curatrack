@@ -13,9 +13,9 @@
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
     <script src="https://unpkg.com/lodash"></script>
 
-    <script type ="module" src="Scripts/register.js" defer></script>
     <script src="Scripts/fakes.js"></script>
-    <script src="Scripts/admin.js"></script>
+    <script type ="module" src="Scripts/register.js"></script>
+    <script type ="module" src="Scripts/admin.js"></script>
 </head>
 
 <body class="admin-body">
@@ -40,29 +40,24 @@
             <legend>Employee Enrollment</legend>
             <form>
 
-                <!-- Username -->
-                <div>
-                    <label for="username">Username</label>
-                    <input type="username" placeholder="johndoe11" id="username" required disabled>
-                </div>
                 <!-- First name -->
                 <div>
                     <label for="first-name">First Name</label>
-                    <input id="first-name" type="text" name="first-name" placeholder="First Name" 
+                    <input id="first-name" type="first-name" name="first-name" placeholder="First Name" 
                     autocomplete="off" required></input>
                 </div>
 
                 <!-- Last name -->
                 <div>
                     <label for="last-name">Last Name</label>
-                    <input id="last-name" type="text" name="last-name" placeholder="Last Name" 
+                    <input id="last-name" type="last-name" name="last-name" placeholder="Last Name" 
                     autocomplete="off"required></input>
                 </div>
 
                 <!-- Email -->
                 <div>
                     <label for="email">Email</label>
-                    <input id="email" type="text" name="email" placeholder="Email" 
+                    <input id="email" type="email" name="email" placeholder="Email" 
                     autocomplete="off" required></input>
                 </div>
 
@@ -70,6 +65,20 @@
                 <div>
                     <input id="birth-date" type="date" name="birthday" value="1991-01-11" min="1930-01-01"
                         max="2006-12-31" required></input>
+                </div>
+
+                <!-- Username -->
+                <!-- <first name> <last name> <birth day> -->
+                <div>
+                    <label for="username">Username</label>
+                    <input type="username" placeholder="Username" id="username" disabled required>
+                </div>
+
+                <!-- Password -->
+                <!-- <first initial> <last initial> <birth year> -->
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" placeholder="Password" value="abcde12345" id="password" disabled required>
                 </div>
 
                 <!-- Doctor or Nurse -->
@@ -91,7 +100,7 @@
                 <button type="button" id="random-data">Random</button>
 
                 <!-- Create new Doctor or Nurse -->
-                <button type="submit" id="new-worker">Submit</button>
+                <button type="submit" id="admin-submit">Create Account</button>
             </form>
         </fieldset>
 

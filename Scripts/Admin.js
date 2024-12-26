@@ -7,7 +7,19 @@
  * [ ] Implement form validation to prevent invalid or missing input when creating new users
  */
 
-/* Empty Employees array that we will fill with data fetched from the localStorage (next iteration, fetch from a database) */
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { firebaseConfig } from './register.js';
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Empty 'Employees' array that we will fill with data fetched from firebase (back-end)
 let Employees = [];
 
 function WordedBirthDate(birthDate) {
@@ -63,11 +75,11 @@ const RetrieveEmployeeData = () => {
     // Use JSON.parse that will convert our JSON string
     // back into JavaScript (in this case valid array)
     let employeesFromLocalStorage = JSON.parse(localStorage.getItem("Employees"));
-    
+
     // No localStorage employees data
     if (!employeesFromLocalStorage) {
         console.log("Error, no data from localStorage");
-    } 
+    }
 
     // Load localStorage employees data
     else {
@@ -228,7 +240,7 @@ const StoreNewEmployeeFromInputs = () => {
     const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
 
     const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
-    const password = "*********";
+    const password = "abcde12345";
     const employmentStatus = "Active";
 
     ////////////////////////////////////////////////////////////
@@ -271,7 +283,7 @@ const AppendNewEmployeeToTableFrontEnd = () =>
     const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
 
     const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
-    const password = "*********";
+    const password = "abcde12345";
     const employmentStatus = "Active";
     const userId = `employee_${Employees.length}`;
 
@@ -366,28 +378,28 @@ const CreateTable = () => {
 // Load employees from database
 const LoadEmployees = () => {
 
-    // Clear table head
+    // Clear table head (front-end)
     $('#employee-headers').html('');
 
-    // Clear table body
+    // Clear table body (front-end)
     $('#employee-tbody').html('');
 
-    // Create table
+    // Create table (front-end)
     CreateTable();
 
-    // Retrieve data from database
+    // Retrieve data from database(back-end)
     RetrieveEmployeeData();
 
-    // Update employee count in front-end
+    // Update employee count in (front-end)
     UpdateEmployeeCountFrontEnd();
 
-    // Update employee count in back-end
-    UpdateEmployeeCountBackEnd();
+    // Update employee count in (back-end)
+    // UpdateEmployeeCountBackEnd();
 
-    // Create amount of rows with Employees length
+    // Create amount of rows with Employees length(front-end)
     CreateXRows(Employees.length);
 
-    // Append employee data to table
+    // Append employee data to table (front-end)
     AppendEmployeesToFrontEnd();
 }
 
@@ -472,10 +484,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Upon DOM load, load employess and show table
     LoadEmployees();
     Employees.length <= 0 ? HideTable() : ShowTable();
-        
+
     // Get references
     const randomDataBtn = document.getElementById("random-data");
-    const submitBtn = document.getElementById("new-worker");
+    const submitBtn = document.getElementById("admin-submit");
 
     const fetchEmployeesBtn = document.getElementById("fetch-employees-database");
     const showTableBtn = document.getElementById("show-table");
@@ -515,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Set random data for user
     randomDataBtn.addEventListener("click", function () {
-        
+
         // Get refrences
         const username = document.getElementById("username");
         const firstName = document.getElementById("first-name");
@@ -548,29 +560,48 @@ document.addEventListener('DOMContentLoaded', function () {
             break;
         }
     });
-    
+
     // Create new worker (i.e.: Doctor or Nurse)
     submitBtn.addEventListener("click", function (e) {
 
-        // Prevent page from refreshing
-        // e.preventDefault();
-        
+        // Prevent page from refreshing after submit
+        e.preventDefault();
+
         // Load employees locally from database
-        LoadEmployees();
+        // LoadEmployees();
 
         // Store new employee entry in array from inputs
-        StoreNewEmployeeFromInputs();
+        // StoreNewEmployeeFromInputs();
 
         // Update whole database with new employee entry
-        UpdateEmployeeDataBaseBackEnd();
+        // UpdateEmployeeDataBaseBackEnd();
 
         // Update employee count in front-end
-        UpdateEmployeeCountFrontEnd();
+        // UpdateEmployeeCountFrontEnd();
 
         // Update employee count in back-end
-        UpdateEmployeeCountBackEnd();
+        // UpdateEmployeeCountBackEnd();
 
-        // Append new employee entry to table
+        // Get user details
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Send new employee data from inputs (front-end) to firebase (back-end)
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed up 
+                const user = userCredential.user;
+                alert("Creating Account...");
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(errorMessage);
+                // ..
+            });
+
+        // Append new employee to table (front-end)
         AppendNewEmployeeToTableFrontEnd();
 
         // Show table
