@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In Dashboard</title>
     <link rel="stylesheet" href="app.css">
-    <script type="module" src="login.html" defer></script>
+    <script type="module" src="Scripts/register.js" defer></script>
+    <script type="module" src="Scripts/Login.js" defer></script>
 </head>
 <body class="login-body">
     <h1>CuraTrack</h1>
@@ -14,7 +15,6 @@
     </nav>
     <nav>
         <a href="./index.html">Home</a>
-        <a href="./Login.html">Log In</a>
     </nav>
     
     <div>
@@ -24,8 +24,7 @@
         <!-- Email -->
         <div>
             <label for="email">Email</label>
-            <input id="email" type="email" name="email" placeholder="Email" 
-            autocomplete="off" required></input>
+            <input id="email" type="email" name="email" placeholder="Email" required></input>
         </div>
         
         <!-- Password -->
@@ -39,8 +38,8 @@
             <label for="user-type"></label>
             <select name="user-type" id="user-type" required>
                 <option disabled selected value> -- select login type -- </option>
-                <option value="employee">Staff</option>
                 <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
             </select>
         </div>
 

@@ -78,7 +78,7 @@ const RetrieveEmployeeData = () => {
 
     // No localStorage employees data
     if (!employeesFromLocalStorage) {
-        console.log("Error, no data from localStorage");
+        // console.log("Error, no data from localStorage");
     }
 
     // Load localStorage employees data
@@ -225,7 +225,7 @@ const getRole = (doctorChosen, nurseRNChosen, nurseLVNChosen) =>
 }
 
 // Store new employee entry in array from inputs
-const StoreNewEmployeeFromInputs = () => {
+const StoreNewEmployeeFromInputs = (user) => {
     /// Get references ///
 
     // worker data
@@ -240,7 +240,7 @@ const StoreNewEmployeeFromInputs = () => {
     const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
 
     const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
-    const password = "abcde12345";
+    const password = "**********";
     const employmentStatus = "Active";
 
     ////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ const StoreNewEmployeeFromInputs = () => {
         "username": username,
         "password_hash": password,
         "employment_status": employmentStatus,
-        "user_id": `employee_${Employees.length + 1}`,
+        "user_id": `${user.uid}`,
     }
 
     // Push new worker to database array
@@ -270,7 +270,7 @@ const StoreNewEmployeeFromInputs = () => {
 // 2. Create tr (row) for employee data item
 // 3. Append each employee data in row
 // 4. Append row into tbody
-const AppendNewEmployeeToTableFrontEnd = () =>
+const AppendNewEmployeeToTableFrontEnd = (user) =>
 {
     // worker data
     const firstName = document.getElementById("first-name");
@@ -283,9 +283,9 @@ const AppendNewEmployeeToTableFrontEnd = () =>
     const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
 
     const username = `${firstName.value.toLowerCase()}${lastName.value.toLowerCase()}1`;
-    const password = "abcde12345";
+    const password = "**********";
     const employmentStatus = "Active";
-    const userId = `employee_${Employees.length}`;
+    const userId = user.uid;
 
     ////////////////////////////////////////////////////////////////////////////
     //-------------------------------- Step 1 --------------------------------//
@@ -394,7 +394,7 @@ const LoadEmployees = () => {
     UpdateEmployeeCountFrontEnd();
 
     // Update employee count in (back-end)
-    // UpdateEmployeeCountBackEnd();
+    UpdateEmployeeCountBackEnd();
 
     // Create amount of rows with Employees length(front-end)
     CreateXRows(Employees.length);
@@ -568,31 +568,37 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
 
         // Load employees locally from database
-        // LoadEmployees();
-
-        // Store new employee entry in array from inputs
-        // StoreNewEmployeeFromInputs();
-
-        // Update whole database with new employee entry
-        // UpdateEmployeeDataBaseBackEnd();
-
-        // Update employee count in front-end
-        // UpdateEmployeeCountFrontEnd();
-
-        // Update employee count in back-end
-        // UpdateEmployeeCountBackEnd();
+        LoadEmployees();
 
         // Get user details
         const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const password = `abcde12345`;
 
         // Send new employee data from inputs (front-end) to firebase (back-end)
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed up 
                 const user = userCredential.user;
-                alert("Creating Account...");
-                // ...
+                console.log(user);
+                alert("Creating Account on Firebase...");
+
+                // Store new employee entry in array from inputs
+                StoreNewEmployeeFromInputs(user);
+
+                // Update whole database with new employee entry
+                UpdateEmployeeDataBaseBackEnd();
+
+                // Update employee count in front-end
+                UpdateEmployeeCountFrontEnd();
+
+                // Update employee count in back-end
+                UpdateEmployeeCountBackEnd();
+
+                // Append new employee to table (front-end)
+                AppendNewEmployeeToTableFrontEnd(user);
+        
+                // Show table
+                ShowTable();
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -600,12 +606,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert(errorMessage);
                 // ..
             });
-
-        // Append new employee to table (front-end)
-        AppendNewEmployeeToTableFrontEnd();
-
-        // Show table
-        ShowTable();
     });
 
 
