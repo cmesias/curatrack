@@ -5,19 +5,63 @@
  * TODO 
  * [ ] Implement UUID new emlpoyee entry
  * [ ] Implement form validation to prevent invalid or missing input when creating new users
+ * 
+ * 
+ * Rules (1/6/2025)
+ * - User IDs and Emails are both stored in Firebase Auth and Firestore Database, will make it
+ *   easy to make queries to retreive usernames but it also crteates redundancies. 
+ *   If this is implemented, we need to implement a method when a user were to change their
+ *   email address in Firebase Auth, it would also need to be update on the Firestore Database
+ *   to keep it update.
+ * 
+ * - Passwords are only stored in Firebase Auth, not in Firestore Database
+ * 
+ * - After creating a new user on Firebase Auth it will return a user object which we will take the "user.uid"
+ *   and store that in Firestore Database. 
+ * 
+ * 
  */
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js'
+
 import { firebaseConfig } from './register.js';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase auth
 const auth = getAuth(app);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+
+// Creates a user in Firestore Database using front-end inputs and Firebase Auth uid and email
+async function createUserInFirestoreDatabase(date_of_birth, email, employement_status, 
+                           first_name, last_name,
+                           role, uid, username) {
+    try {
+        const docRef = await addDoc(collection(db, "staff"), {
+            date_of_birth, 
+            email, 
+            employement_status,
+            first_name, 
+            last_name,
+            role, 
+            uid, 
+            username
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+}
 
 // Empty 'Employees' array that we will fill with data fetched from firebase (back-end)
 let Employees = [];
@@ -570,35 +614,90 @@ document.addEventListener('DOMContentLoaded', function () {
         // Load employees locally from database
         LoadEmployees();
 
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //---------------------- Firebase Auth Data --------------------//
         // Get user details
-        const email = document.getElementById("email").value;
         const password = `abcde12345`;
+        //---------------------- Firebase Auth Data --------------------//
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //------------------ Firestore Database Data -------------------//
+        // worker data
+        const firstName = document.getElementById("first-name").value;
+        const lastName = document.getElementById("last-name").value;
+        const birthDate = document.getElementById("birth-date").value;
+    
+        const doctorChosen = document.getElementById("doctor_role");
+        const nurseRNChosen = document.getElementById("rn_role");
+        const nurseLVNChosen = document.getElementById("lvn_role");
+        const role = getRole(doctorChosen, nurseRNChosen, nurseLVNChosen);
+    
+        const employmentStatus = "Active";
+        //------------------ Firestore Database Data -------------------//
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //--------------- Firebase Auth AND Firestore Data -------------//
+
+        const email = document.getElementById("email").value;
+        const username = `${firstName.toLowerCase()}${lastName.toLowerCase()}1`;
+
+        //--------------- Firebase Auth AND Firestore Data -------------//
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
 
         // Send new employee data from inputs (front-end) to firebase (back-end)
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+
+                // Response after sending data to Firebase Auth
                 // Signed up 
                 const user = userCredential.user;
-                console.log(user);
-                alert("Creating Account on Firebase...");
+                console.log(user.uid);
+                console.log("Creating account to Firebase Auth...");
+
+                /////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////////////////
+                //-------------------------------- Deprecated Code --------------------------------//
 
                 // Store new employee entry in array from inputs
-                StoreNewEmployeeFromInputs(user);
+                // StoreNewEmployeeFromInputs(user);
 
                 // Update whole database with new employee entry
-                UpdateEmployeeDataBaseBackEnd();
+                // UpdateEmployeeDataBaseBackEnd();
 
                 // Update employee count in front-end
-                UpdateEmployeeCountFrontEnd();
+                // UpdateEmployeeCountFrontEnd();
 
                 // Update employee count in back-end
-                UpdateEmployeeCountBackEnd();
+                // UpdateEmployeeCountBackEnd();
 
                 // Append new employee to table (front-end)
-                AppendNewEmployeeToTableFrontEnd(user);
+                // AppendNewEmployeeToTableFrontEnd(user);
         
                 // Show table
-                ShowTable();
+                // ShowTable();
+
+                //-------------------------------- Deprecated Code --------------------------------//
+                /////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////////////////
+
+                /////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////////////////
+                //------------------- Send Employee data to firestore database --------------------//
+                createUserInFirestoreDatabase(birthDate, email, employmentStatus, firstName, lastName, role, user.uid, username);
+                console.log("Account created in Firebase Auth. UID:", user.uid);
+                console.log("Sending new account details to Firestore Database...");
+
+                //------------------- Send Employee data to firestore database --------------------//
+                /////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////////////////
             })
             .catch((error) => {
                 const errorCode = error.code;
