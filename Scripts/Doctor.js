@@ -1,3 +1,45 @@
+import { initializeApp,
+    getAuth, createUserWithEmailAndPassword,
+    getFirestore, collection, addDoc, 
+    firebaseConfig } from './register.js';
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase auth
+const auth = getAuth(app);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+
+// Creates a user in Firestore Database using front-end inputs and Firebase Auth uid and email
+async function createUserInFirestoreDatabase(first_name, 
+                        last_name, 
+                        email,
+                        date_of_birth, 
+                        care_type, 
+                        residency_status, 
+                        uid) {
+    try {
+        const docRef = await addDoc(collection(db, "residents"), {
+            first_name,
+            last_name,
+            email,
+            date_of_birth,
+            care_type,
+            residency_status,
+            uid
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+}
+
 // Author: Carl Mesias
 // Title: Doctor Dashboard
 
@@ -9,37 +51,6 @@
 
 /* Empty Residents array that we will fill with data fetched from the localStorage (next iteration, fetch from a database) */
 let Residents = [];
-
-function WordedBirthDate(birthDate) {
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ];
-
-    const birthYear = birthDate.slice(0, 4);
-    const birthMonth = birthDate.slice(5, 7);
-    const birthDay = birthDate.slice(8, 10);
-
-    // Remove "0" from Month. 
-    // We minus 1 because selecting a month starts with 1, but in an array it starts with 0 index
-    let idxMonth = (parseInt(birthMonth, 10)) - 1;
-    let month = months[idxMonth];
-
-    // Remove "0" from Day
-    let day = parseInt(birthDay, 10);
-
-    return `${month} ${day}, ${birthYear}`;
-}
 
 // Update resident count in front-end
 const UpdateResidentCountFrontEnd = () => {
@@ -66,7 +77,7 @@ const RetrieveResidentData = () => {
     
     // No localStorage residents data
     if (!residentsFromLocalStorage) {
-        console.log("Error, no data from localStorage");
+        // console.log("Error, no data from localStorage");
     } 
 
     // Load localStorage residents data
@@ -505,9 +516,9 @@ document.addEventListener('DOMContentLoaded', function () {
         let residencyStatus = document.getElementById("residency-status");
 
         // Set data to random values
-        firstName.value = randomFirstName();
-        lastName.value = randomLastName();
-        email.value = randomEmail();
+        firstName.value = randomResidentFirstName();
+        lastName.value = randomResidentLastName();
+        email.value = randomResidentEmail();
         date.value = randomDate();
         careType.value = randomCareType();
         residencyStatus.value = randomResidencyStatus();
@@ -518,27 +529,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Prevent page from refreshing
         e.preventDefault();
-        
-        // Load residents locally from database
-        LoadResidents();
 
-        // Store new resident entry in array from inputs
-        StoreNewResidentFromInputs();
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //------------------ Firestore Database Data -------------------//
 
-        // Update whole database with new resident entry
-        UpdateResidentDataBaseBackEnd();
+        let firstName = document.getElementById("first-name").value;
+        let lastName = document.getElementById("last-name").value;
+        let email = document.getElementById("email").value;
 
-        // Update resident count in front-end
-        UpdateResidentCountFrontEnd();
+        let brithDate = document.getElementById("birth-date").value  // YYYY-MM-DD
+        let careType = document.getElementById("care-type").value;
+        let residencyStatus = document.getElementById("residency-status").value;
+        let uid = self.crypto.randomUUID(); // Generate a random UUID foor the resident
 
-        // Update resident count in back-end
-        UpdateResidentCountBackEnd();
+        //------------------ Firestore Database Data -------------------//
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
 
-        // Append new resident entry to table
-        AppendNewResidentToTableFrontEnd();
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //------------------- Send Employee data to firestore database --------------------//
 
-        // Show table
-        ShowTable();
+        createUserInFirestoreDatabase(firstName, lastName, email, brithDate, careType, residencyStatus, uid);
+        // console.log("RESIDENT account creating with uid", uid);
+        console.log("Sending new account details to Firestore Database...");
+
+        //------------------- Send Employee data to firestore database --------------------//
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //-------------------------------- Deprecated Code --------------------------------//
+
+        // // Load residents locally from database
+        // LoadResidents();
+
+        // // Store new resident entry in array from inputs
+        // StoreNewResidentFromInputs();
+
+        // // Update whole database with new resident entry
+        // UpdateResidentDataBaseBackEnd();
+
+        // // Update resident count in front-end
+        // UpdateResidentCountFrontEnd();
+
+        // // Update resident count in back-end
+        // UpdateResidentCountBackEnd();
+
+        // // Append new resident entry to table
+        // AppendNewResidentToTableFrontEnd();
+
+        // // Show table
+        // ShowTable();
+
+        //-------------------------------- Deprecated Code --------------------------------//
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
     });
 });
 

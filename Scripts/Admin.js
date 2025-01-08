@@ -1,3 +1,45 @@
+import { initializeApp,
+    getAuth, createUserWithEmailAndPassword,
+    getFirestore, collection, addDoc, 
+    firebaseConfig } from './register.js';
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase auth
+const auth = getAuth(app);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+
+// Creates a user in Firestore Database using front-end inputs and Firebase Auth uid and email
+async function createUserInFirestoreDatabase(date_of_birth, 
+                            email, employement_status, 
+                            first_name, 
+                            last_name,
+                            role, 
+                            uid, 
+                            username) {
+    try {
+        const docRef = await addDoc(collection(db, "employees"), {
+            date_of_birth, 
+            email, 
+            employement_status,
+            first_name, 
+            last_name,
+            role, 
+            uid, 
+            username
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+}
+
 // Author: Carl Mesias
 // Title: Admin Dashboard
 
@@ -22,80 +64,8 @@
  * 
  */
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js'
-
-import { firebaseConfig } from './register.js';
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase auth
-const auth = getAuth(app);
-
-// Initialize Cloud Firestore and get a reference to the service
-const db = getFirestore(app);
-
-// Creates a user in Firestore Database using front-end inputs and Firebase Auth uid and email
-async function createUserInFirestoreDatabase(date_of_birth, email, employement_status, 
-                           first_name, last_name,
-                           role, uid, username) {
-    try {
-        const docRef = await addDoc(collection(db, "staff"), {
-            date_of_birth, 
-            email, 
-            employement_status,
-            first_name, 
-            last_name,
-            role, 
-            uid, 
-            username
-        });
-        console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-}
-
 // Empty 'Employees' array that we will fill with data fetched from firebase (back-end)
 let Employees = [];
-
-function WordedBirthDate(birthDate) {
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ];
-
-    const birthYear = birthDate.slice(0, 4);
-    const birthMonth = birthDate.slice(5, 7);
-    const birthDay = birthDate.slice(8, 10);
-
-    // Remove "0" from Month. 
-    // We minus 1 because selecting a month starts with 1, but in an array it starts with 0 index
-    let idxMonth = (parseInt(birthMonth, 10)) - 1;
-    let month = months[idxMonth];
-
-    // Remove "0" from Day
-    let day = parseInt(birthDay, 10);
-
-    return `${month} ${day}, ${birthYear}`;
-}
 
 // Update employee count in front-end
 const UpdateEmployeeCountFrontEnd = () => {
@@ -584,9 +554,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const lvnRole = document.getElementById("lvn_role");
 
         // Set data to random values
-        firstName.value = randomFirstName();
-        lastName.value = randomLastName();
-        email.value = randomEmail();
+        firstName.value = randomEmployeeFirstName();
+        lastName.value = randomEmployeeLastName();
+        email.value = randomEmployeeEmail();
         birthDate.value = randomDate();
         username.value = `${firstName.value}${lastName.value}${birthDate.value.slice(8, 10)}`.toLowerCase();
 
@@ -612,12 +582,12 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
 
         // Load employees locally from database
-        LoadEmployees();
+        // LoadEmployees();
 
         //////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////
         //---------------------- Firebase Auth Data --------------------//
-        // Get user details
+
         const password = `abcde12345`;
         //---------------------- Firebase Auth Data --------------------//
         //////////////////////////////////////////////////////////////////
@@ -626,7 +596,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////
         //------------------ Firestore Database Data -------------------//
-        // worker data
+
         const firstName = document.getElementById("first-name").value;
         const lastName = document.getElementById("last-name").value;
         const birthDate = document.getElementById("birth-date").value;
@@ -646,7 +616,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //--------------- Firebase Auth AND Firestore Data -------------//
 
         const email = document.getElementById("email").value;
-        const username = `${firstName.toLowerCase()}${lastName.toLowerCase()}1`;
+        const username = document.getElementById("username").value;
 
         //--------------- Firebase Auth AND Firestore Data -------------//
         //////////////////////////////////////////////////////////////////
@@ -659,8 +629,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Response after sending data to Firebase Auth
                 // Signed up 
                 const user = userCredential.user;
-                console.log(user.uid);
-                console.log("Creating account to Firebase Auth...");
+                console.log("Creating EMPLOYEE account in Firebase Auth...");
+
+                /////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////////////////
+                //------------------- Send Employee data to firestore database --------------------//
+
+                createUserInFirestoreDatabase(birthDate, email, employmentStatus, firstName, lastName, role, user.uid, username);
+                // console.log("EMPLOYEE account created in Firebase Auth. UID:", user.uid);
+                console.log("Sending new account details to Firestore Database...");
+
+                //------------------- Send Employee data to firestore database --------------------//
+                /////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////////////////
 
                 /////////////////////////////////////////////////////////////////////////////////////
                 /////////////////////////////////////////////////////////////////////////////////////
@@ -685,17 +666,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // ShowTable();
 
                 //-------------------------------- Deprecated Code --------------------------------//
-                /////////////////////////////////////////////////////////////////////////////////////
-                /////////////////////////////////////////////////////////////////////////////////////
-
-                /////////////////////////////////////////////////////////////////////////////////////
-                /////////////////////////////////////////////////////////////////////////////////////
-                //------------------- Send Employee data to firestore database --------------------//
-                createUserInFirestoreDatabase(birthDate, email, employmentStatus, firstName, lastName, role, user.uid, username);
-                console.log("Account created in Firebase Auth. UID:", user.uid);
-                console.log("Sending new account details to Firestore Database...");
-
-                //------------------- Send Employee data to firestore database --------------------//
                 /////////////////////////////////////////////////////////////////////////////////////
                 /////////////////////////////////////////////////////////////////////////////////////
             })
